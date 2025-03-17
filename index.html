@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách liên hệ</title>
+</head>
+<body>
+    <h1>Danh sách liên hệ</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Họ</th>
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+            </tr>
+        </thead>
+        <tbody id="contact-list"></tbody>
+    </table>
+
+    <script>
+        async function fetchContacts() {
+            try {
+                const response = await fetch("http://localhost:3000/api/contacts");
+                const data = await response.json();
+
+                let tableBody = "";
+                data.forEach(contact => {
+                    tableBody += `<tr>
+                        <td>${contact.ID}</td>
+                        <td>${contact.LAST_NAME || ""}</td>
+                        <td>${contact.NAME || ""}</td>
+                        <td>${contact.EMAIL ? contact.EMAIL[0].VALUE : ""}</td>
+                        <td>${contact.PHONE ? contact.PHONE[0].VALUE : ""}</td>
+                    </tr>`;
+                });
+                document.getElementById("contact-list").innerHTML = tableBody;
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu:", error);
+            }
+        }
+
+        fetchContacts();
+    </script>
+</body>
+</html>
